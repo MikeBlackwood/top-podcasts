@@ -24,8 +24,7 @@ function App() {
   return (
     <div className="container mx-auto">
       <Nav />
-
-      {podcastList ? <PodcastList data={podcastList} /> : <></>}
+      <PodcastList data={podcastList} />
     </div>
   );
 }
