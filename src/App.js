@@ -1,10 +1,12 @@
 import "./App.css";
+import Nav from "./components/nav";
+import Loading from "./components/loading";
 import { useEffect, useState } from "react";
 import PodcastList from "./components/podcastList";
 import getCurrentDate from "./util/getCurrentDate";
 function App() {
-
   const [podcastList, setPodcastList] = useState(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     fetch(
       `https://nwyfxudnu3.execute-api.us-west-2.amazonaws.com/dev/podcasts?date=${getCurrentDate()}`
@@ -12,14 +14,17 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
         setPodcastList(data);
+        setLoading(false);
       });
   }, []);
 
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <div className="container mx-auto">
-      <div>
-        <h1 className='text-center'>Podcast Rating</h1>
-      </div>
+      <Nav />
+
       {podcastList ? <PodcastList data={podcastList} /> : <></>}
     </div>
   );
