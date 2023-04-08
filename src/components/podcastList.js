@@ -6,6 +6,7 @@ const PodcastList = ({ data }) => {
     <Suspense fallback={<div>Loading</div>}>
       <PodcastCard
         link={data.link}
+        ket={data.title}
         thumbnail={data.thumbnail}
         title={data.title}
         production={data.production}
