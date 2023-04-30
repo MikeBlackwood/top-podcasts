@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import PodcastList from "./components/podcastList";
 import getCurrentDate from "./util/getCurrentDate";
 import Datepicker from "react-tailwindcss-datepicker";
+import toast, { Toaster } from "react-hot-toast";
 function App() {
   const [podcastList, setPodcastList] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -28,14 +29,31 @@ function App() {
   if (loading) {
     return <Loading />;
   }
+
+  const isValidDate = (date) => {
+    const today = new Date();
+    const dateToValidate = new Date(date);
+    return today < dateToValidate ? false : true;
+  };
+
   const handleValueChange = (value) => {
-    setDate(value);
+    const date = value.startDate.split("-");
+    const formatedDate = `${date[1]}-${date[2]}-${date[0]}`;
+    // check if the date is valid
+    if (isValidDate(formatedDate)) {
+      setDate({ startDate: formatedDate, endDate: formatedDate });
+    } else {
+      toast.error("Please select a valid date");
+    }
   };
 
   return (
     <div className="container mx-auto">
+      <Toaster position="bottom-center" reverseOrder={false} />
       <Nav />
-      <Datepicker asSingle={true} value={date} onChange={handleValueChange} />
+      <div className="py-3">
+        <Datepicker asSingle={true} value={date} onChange={handleValueChange} />
+      </div>
       <PodcastList data={podcastList} />
     </div>
   );
